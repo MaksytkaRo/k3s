@@ -82,6 +82,7 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
 
 {{- if .NodeConfig.AgentConfig.Snapshotter }}
 [plugins."io.containerd.grpc.v1.cri".containerd]
+  no_pivot = true
   snapshotter = "{{ .NodeConfig.AgentConfig.Snapshotter }}"
   disable_snapshot_annotations = {{ if or (eq .NodeConfig.AgentConfig.Snapshotter "stargz") (eq .NodeConfig.AgentConfig.Snapshotter "nix") }}false{{else}}true{{end}}
   {{ if .NodeConfig.DefaultRuntime }}default_runtime_name = "{{ .NodeConfig.DefaultRuntime }}"{{end}}
@@ -147,6 +148,7 @@ enable_keychain = true
   runtime_type = "io.containerd.runc.v2"
 
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+  NoPivotRoot = true
   SystemdCgroup = {{ .SystemdCgroup }}
 
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runhcs-wcow-process]
@@ -194,6 +196,9 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
 [plugins.'io.containerd.grpc.v1.cri']
   stream_server_address = "127.0.0.1"
   stream_server_port = "10010"
+
+[plugins."io.containerd.grpc.v1.cri".containerd]
+  no_pivot = true
 
 [plugins.'io.containerd.cri.v1.runtime']
   enable_selinux = {{ .NodeConfig.SELinux }}
@@ -243,6 +248,7 @@ state = {{ printf "%q" .NodeConfig.Containerd.State }}
   runtime_type = "io.containerd.runc.v2"
 
 [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
+  NoPivotRoot = true
   SystemdCgroup = {{ .SystemdCgroup }}
 
 [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runhcs-wcow-process]
